@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YOLOv8 Detection</title>
+</head>
+<body>
+
+<h2 style="text-align:center;">Real-Time Object Detection</h2>
+
+<div style="text-align:center;">
+    <button onclick="startCamera()">Start</button>
+    <button onclick="stopCamera()">Stop</button>
+    <button onclick="capture()">Capture</button>
+</div>
+
+<br>
+
+<div style="text-align:center;">
+    <img id="video" width="700">
+</div>
+
+<h3 style="text-align:center;" id="count">Objects: 0</h3>
+
+<script>
+function startCamera() {
+    fetch('/start')
+    .then(() => {
+        document.getElementById("video").src = "/video";
+    });
+}
+
+function stopCamera() {
+    fetch('/stop');
+    document.getElementById("video").src = "";
+}
+
+function capture() {
+    fetch('/capture')
+    .then(() => alert("Screenshot saved!"));
+}
+
+// Update object count every second
+setInterval(() => {
+    fetch('/count')
+    .then(res => res.text())
+    .then(data => {
+        document.getElementById("count").innerText = "Objects: " + data;
+    });
+}, 1000);
+</script>
+
+</body>
+</html>
